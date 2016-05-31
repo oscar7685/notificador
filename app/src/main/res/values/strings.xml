@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Artemys</string>
+    <string name="registering_message">Generando Token...</string>
+    <string name="gcm_send_message">Token recibido.</string>
+    <string name="token_error_message">An error occurred while either fetching the InstanceID token,
+        sending the fetched token to the server or subscribing to the PubSub topic. Please try
+        running the sample again.</string>
+
+    <string name="registro">Registrarse</string>
+    <string name="notificaciones">Ver Notificaciones</string>
+
+    <string name="action_settings">Ajustes</string>
+    <string name="action_search">Buscar</string>
+    <string name="drawer_open">Abrir</string>
+    <string name="drawer_close">Cerrar</string>
+
+    <string name="nav_item_home">Registro</string>
+    <string name="nav_item_friends">Friends</string>
+    <string name="nav_item_notifications">Notificaciones</string>
+
+    <!-- navigation drawer item labels  -->
+    <string-array name="nav_drawer_labels">
+        <item>@string/nav_item_home</item>
+        <item>@string/nav_item_notifications</item>
+    </string-array>
+
+    <string name="title_messages">Notificaciones</string>
+    <string name="title_friends">Friends</string>
+    <string name="title_home">Registro</string>
+    <string name="appbar_scrolling_view_behavior">scrolling</string>
+
+</resources>
