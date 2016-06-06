@@ -42,11 +42,7 @@ public class principal extends AppCompatActivity implements FragmentDrawer.Fragm
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
 
-
         displayView(0);
-
-
-
 
     }
 
@@ -57,20 +53,22 @@ public class principal extends AppCompatActivity implements FragmentDrawer.Fragm
         return true;
     }
 
-    @Override
+    /* @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+       // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+           // Toast.makeText(getApplicationContext(), "Seleccionar seleccionado" , Toast.LENGTH_SHORT).show();
             return true;
+
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @Override
     public void onDrawerItemSelected(View view, int position) {

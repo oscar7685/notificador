@@ -15,6 +15,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -26,6 +27,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -47,7 +50,7 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
     private MoviesAdapter mAdapter;
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     private static final int SPAN_COUNT = 2;
-
+    private CheckBox chk;
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
@@ -82,6 +85,8 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.action_search).setVisible(true);
+        menu.findItem(R.id.action_delete).setVisible(false);
+        menu.findItem(R.id.action_select_all).setVisible(false);
         super.onPrepareOptionsMenu(menu);
     }
 
@@ -91,19 +96,7 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
         rootView = inflater.inflate(R.layout.content_main, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Movie movie = movieList.get(position);
-                Toast.makeText(getActivity(), movie.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
-            }
 
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
                 new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -130,16 +123,6 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
         itemTouchHelper.attachToRecyclerView(recyclerView);
         mAdapter = new MoviesAdapter(movieList);
         mLayoutManager = new LinearLayoutManager(getActivity());
-
-        /*mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-
-        if (savedInstanceState != null) {
-            // Restore saved layout manager type.
-            mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
-                    .getSerializable(KEY_LAYOUT_MANAGER);
-        }
-        setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
-        */
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -245,8 +228,57 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
-
+        final Menu m = menu;
         final MenuItem item = menu.findItem(R.id.action_search);
+
+        final MenuItem item2 = menu.findItem(R.id.action_settings);
+
+        item2.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                m.findItem(R.id.action_delete).setVisible(true);
+                m.findItem(R.id.action_select_all).setVisible(true);
+                mAdapter.visibility = View.VISIBLE;
+                mAdapter.notifyDataSetChanged();
+                return true;
+            }
+        });
+
+        final MenuItem item3 = menu.findItem(R.id.action_delete);
+        item3.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                List<Movie> movieList2 = new ArrayList<Movie>();
+                for (int i = 0; i < movieList.size() ; i++) {
+                    if(!movieList.get(i).isSelected()){
+                        movieList2.add(movieList.get(i));
+                    }
+                }
+                movieList = movieList2;
+                saveArray(movieList);
+                mAdapter.notifyDataSetChanged();
+
+                m.findItem(R.id.action_delete).setVisible(false);
+                m.findItem(R.id.action_select_all).setVisible(false);
+                mAdapter.visibility = View.GONE;
+                mAdapter.notifyDataSetChanged();
+                return true;
+            }
+        });
+
+        final MenuItem item4 = menu.findItem(R.id.action_select_all);
+        item4.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                for (int i = 0; i < movieList.size() ; i++) {
+                        movieList.get(i).setSelected(true);
+                }
+                saveArray(movieList);
+                mAdapter.notifyDataSetChanged();
+               return true;
+            }
+        });
+
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
 

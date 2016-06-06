@@ -9,8 +9,10 @@
     <string name="registro">Registrarse</string>
     <string name="notificaciones">Ver Notificaciones</string>
 
-    <string name="action_settings">Ajustes</string>
+    <string name="action_settings">Seleccionar</string>
     <string name="action_search">Buscar</string>
+    <string name="action_delete">Del</string>
+    <string name="action_select_all">All</string>
     <string name="drawer_open">Abrir</string>
     <string name="drawer_close">Cerrar</string>
 

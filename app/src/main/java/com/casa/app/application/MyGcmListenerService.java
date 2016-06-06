@@ -86,7 +86,7 @@ public class MyGcmListenerService extends GcmListenerService {
             m.setGenre("Aplicacion");
             m.setYear("2016");
 
-            movieList.add(m);
+            movieList.add(0, m);
             SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
             String aux = gson.toJson(movieList);
             prefsEditor.putString("Movies", aux);

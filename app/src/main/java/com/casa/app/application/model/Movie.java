@@ -5,6 +5,8 @@ package com.casa.app.application.model;
  */
 public class Movie {
     private String title, genre, year;
+    private boolean isSelected;
+    private int visibility;
 
     public Movie() {
     }
@@ -37,5 +39,21 @@ public class Movie {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    public int getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(int visibility) {
+        this.visibility = visibility;
     }
 }
