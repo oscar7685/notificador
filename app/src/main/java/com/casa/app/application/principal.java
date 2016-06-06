@@ -43,17 +43,6 @@ public class principal extends AppCompatActivity implements FragmentDrawer.Fragm
         drawerFragment.setDrawerListener(this);
 
 
-        prepareMovieData();
-        SharedPreferences appSharedPrefs = PreferenceManager
-                .getDefaultSharedPreferences(this.getApplicationContext());
-        SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(movieList);
-        prefsEditor.putString("Movies", json);
-        prefsEditor.commit();
-
-
-
         displayView(0);
 
 

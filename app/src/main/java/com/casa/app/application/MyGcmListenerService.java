@@ -20,18 +20,28 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.casa.app.application.model.Movie;
 import com.google.android.gms.gcm.GcmListenerService;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
-
+    private List<Movie> movieList = new ArrayList<>();
     /**
      * Called when message is received.
      *
@@ -59,6 +69,35 @@ public class MyGcmListenerService extends GcmListenerService {
          *     - Store message in local database.
          *     - Update UI.
          */
+
+
+
+        SharedPreferences appSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Gson gson = new Gson();
+        String json = appSharedPrefs.getString("Movies", "");
+        if(json != null){
+            Type collectionType = new TypeToken<Collection<Movie>>(){}.getType();
+            Collection<Movie> co= (Collection<Movie>) gson.fromJson(json, collectionType);
+
+            movieList.addAll(co);
+
+            Movie m = new Movie();
+            m.setTitle(message);
+            m.setGenre("Aplicacion");
+            m.setYear("2016");
+
+            movieList.add(m);
+            SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
+            String aux = gson.toJson(movieList);
+            prefsEditor.putString("Movies", aux);
+            prefsEditor.commit();
+            System.out.println("JSON distinto de null");
+
+        }else{
+            System.out.println("JSON es null");
+        }
+
+
 
         /**
          * In some cases it may be useful to show a notification indicating to the user
