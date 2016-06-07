@@ -6,6 +6,8 @@ package com.casa.app.application;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -34,6 +36,7 @@ import android.widget.Toast;
 
 import com.casa.app.application.R;
 import com.casa.app.application.adapter.MoviesAdapter;
+import com.casa.app.application.database.NotificacionSQLiteHelper;
 import com.casa.app.application.model.Movie;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -78,8 +81,6 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -97,7 +98,6 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
 
-
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
                 new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
@@ -112,7 +112,7 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
                         int position = viewHolder.getAdapterPosition();
                         Movie movie = movieList.get(position);
                         movieList.remove(position);
-                        saveArray(movieList);
+                        eliminarMovie(movie.getCodigo());
                         mAdapter.notifyItemRemoved(position);
                         mAdapter.notifyDataSetChanged();
 
@@ -161,19 +161,20 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
         recyclerView.scrollToPosition(scrollPosition);
     }
     private void prepareMovieData() {
-        SharedPreferences appSharedPrefs = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
-        Gson gson = new Gson();
-        String json = appSharedPrefs.getString("Movies", "");
+        //Abrimos la base de datos 'DBUsuarios' en modo escritura
+        NotificacionSQLiteHelper Ntdbh =    new NotificacionSQLiteHelper(getActivity(), "DBNotificiones", null, 1);
+        SQLiteDatabase db = Ntdbh.getWritableDatabase();
+        Cursor fila = db.rawQuery("select codigo , nombre, genero, year from Notificacion", null);
+        fila.moveToFirst();
+        while(!fila.isAfterLast()) {
+            Movie m = new Movie(fila.getInt(0), fila.getString(1), fila.getString(2), fila.getString(3));
+            fila.moveToNext();
+            movieList.add(m);
+            mAdapter.notifyDataSetChanged();
+        }
+        fila.close();
+        db.close();
 
-        Type collectionType = new TypeToken<Collection<Movie>>(){}.getType();
-        Collection<Movie> co= (Collection<Movie>) gson.fromJson(json, collectionType);
-
-        movieList.addAll(co);
-
-
-
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -186,6 +187,22 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
         super.onDetach();
     }
 
+
+    public void eliminarMovie(int codigoMovie){
+     try{   // Abrimos una conexión
+        NotificacionSQLiteHelper Ntdbh =    new NotificacionSQLiteHelper(getActivity(), "DBNotificiones", null, 1);
+        SQLiteDatabase db = Ntdbh.getWritableDatabase();
+        // Consultamos los datos
+        int cant = db.delete("Notificacion", "codigo=" + codigoMovie, null);
+        db.close();
+        // Cerramos la conexion
+
+    } catch (Exception ex) {
+         System.out.println("Algo ha ido mal, capturamos la excepcion");
+
+    }
+
+    }
 
     public void saveArray(List<Movie> sKey)
     {
@@ -250,13 +267,13 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
             public boolean onMenuItemClick(MenuItem item) {
                 List<Movie> movieList2 = new ArrayList<Movie>();
                 for (int i = 0; i < movieList.size() ; i++) {
-                    if(!movieList.get(i).isSelected()){
-                        movieList2.add(movieList.get(i));
+                    if(movieList.get(i).isSelected()){
+                        eliminarMovie(movieList.get(i).getCodigo());
+                        mAdapter.notifyDataSetChanged();
                     }
                 }
-                movieList = movieList2;
-                saveArray(movieList);
-                mAdapter.notifyDataSetChanged();
+
+
 
                 m.findItem(R.id.action_delete).setVisible(false);
                 m.findItem(R.id.action_select_all).setVisible(false);
@@ -273,7 +290,7 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
                 for (int i = 0; i < movieList.size() ; i++) {
                         movieList.get(i).setSelected(true);
                 }
-                saveArray(movieList);
+               // saveArray(movieList);
                 mAdapter.notifyDataSetChanged();
                return true;
             }

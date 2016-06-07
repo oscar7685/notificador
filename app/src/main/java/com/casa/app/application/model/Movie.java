@@ -7,6 +7,7 @@ public class Movie {
     private String title, genre, year;
     private boolean isSelected;
     private int visibility;
+    private int codigo;
 
     public Movie() {
     }
@@ -16,6 +17,14 @@ public class Movie {
         this.genre = genre;
         this.year = year;
     }
+
+    public Movie(int codigo, String title, String genre, String year) {
+        this.title = title;
+        this.genre = genre;
+        this.year = year;
+        this.codigo = codigo;
+    }
+
 
     public String getTitle() {
         return title;
@@ -55,5 +64,13 @@ public class Movie {
 
     public void setVisibility(int visibility) {
         this.visibility = visibility;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
     }
 }

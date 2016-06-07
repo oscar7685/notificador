@@ -18,9 +18,12 @@ package com.casa.app.application;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +31,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.casa.app.application.database.NotificacionSQLiteHelper;
 import com.casa.app.application.model.Movie;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.google.gson.Gson;
@@ -52,7 +56,9 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
+        System.out.println("mensaje recibido");
         String message = data.getString("message");
+        String codigo = data.getString("codigo");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
@@ -69,34 +75,38 @@ public class MyGcmListenerService extends GcmListenerService {
          *     - Store message in local database.
          *     - Update UI.
          */
+        System.out.println("pasaba por aqui");
+       try {
+           NotificacionSQLiteHelper Ntdbh = new NotificacionSQLiteHelper(this,
+                   "DBNotificiones", null, 1);
+           SQLiteDatabase bd = Ntdbh.getWritableDatabase();
+
+           String nombre = message;
+           String genero = "Aplicacion";
+           String year = "2016";
+           ContentValues registro = new ContentValues();
+           registro.put("codigo", codigo);
+           registro.put("nombre", nombre);
+           registro.put("genero", genero);
+           registro.put("year", year);
+           bd.insert("Notificacion", null, registro);
+           bd.close();
 
 
+           SQLiteDatabase bd2 = Ntdbh.getWritableDatabase();
+           Cursor fila = bd2.rawQuery("select codigo , nombre, genero, year from Notificacion", null);
+           if (fila.moveToFirst()) {
+               Movie m = new Movie(fila.getInt(0), fila.getString(1), fila.getString(2), fila.getString(3));
+               System.out.println("movie "+m.getTitle());
+               movieList.add(m);
+               //mAdapter.notifyDataSetChanged();
+           }
 
-        SharedPreferences appSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Gson gson = new Gson();
-        String json = appSharedPrefs.getString("Movies", "");
-        if(json != null){
-            Type collectionType = new TypeToken<Collection<Movie>>(){}.getType();
-            Collection<Movie> co= (Collection<Movie>) gson.fromJson(json, collectionType);
 
-            movieList.addAll(co);
-
-            Movie m = new Movie();
-            m.setTitle(message);
-            m.setGenre("Aplicacion");
-            m.setYear("2016");
-
-            movieList.add(0, m);
-            SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
-            String aux = gson.toJson(movieList);
-            prefsEditor.putString("Movies", aux);
-            prefsEditor.commit();
-            System.out.println("JSON distinto de null");
-
-        }else{
-            System.out.println("JSON es null");
-        }
-
+           System.out.println("pasaba por aqui2");
+       }catch (Exception e){
+           System.out.println("ha ocurrido un pinche error");
+       }
 
 
         /**

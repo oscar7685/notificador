@@ -2,6 +2,8 @@ package com.casa.app.application;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.casa.app.application.database.NotificacionSQLiteHelper;
 import com.casa.app.application.model.Movie;
 import com.google.gson.Gson;
 
@@ -41,7 +44,6 @@ public class principal extends AppCompatActivity implements FragmentDrawer.Fragm
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
-
         displayView(0);
 
     }
