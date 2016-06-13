@@ -38,7 +38,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -75,15 +78,16 @@ public class MyGcmListenerService extends GcmListenerService {
          *     - Store message in local database.
          *     - Update UI.
          */
-        System.out.println("pasaba por aqui");
+
        try {
            NotificacionSQLiteHelper Ntdbh = new NotificacionSQLiteHelper(this,
                    "DBNotificiones", null, 1);
            SQLiteDatabase bd = Ntdbh.getWritableDatabase();
-
            String nombre = message;
            String genero = "Aplicacion";
-           String year = "2016";
+           Calendar c = Calendar.getInstance();
+           SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+           String year = sdf.format(c.getTime());
            ContentValues registro = new ContentValues();
            registro.put("codigo", codigo);
            registro.put("nombre", nombre);
@@ -97,13 +101,9 @@ public class MyGcmListenerService extends GcmListenerService {
            Cursor fila = bd2.rawQuery("select codigo , nombre, genero, year from Notificacion", null);
            if (fila.moveToFirst()) {
                Movie m = new Movie(fila.getInt(0), fila.getString(1), fila.getString(2), fila.getString(3));
-               System.out.println("movie "+m.getTitle());
                movieList.add(m);
                //mAdapter.notifyDataSetChanged();
            }
-
-
-           System.out.println("pasaba por aqui2");
        }catch (Exception e){
            System.out.println("ha ocurrido un pinche error");
        }

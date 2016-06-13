@@ -106,7 +106,7 @@ public class principal extends AppCompatActivity implements FragmentDrawer.Fragm
             fragmentTransaction.commit();
 
             // set the toolbar title
-            getSupportActionBar().setTitle(title);
+           // getSupportActionBar().setTitle(title);
         }
     }
 

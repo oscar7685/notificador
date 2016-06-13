@@ -115,6 +115,7 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
                         eliminarMovie(movie.getCodigo());
                         mAdapter.notifyItemRemoved(position);
                         mAdapter.notifyDataSetChanged();
+                        getActivity().setTitle("Notificaciones ("+movieList.size()+")");
 
             }
         };
@@ -172,6 +173,7 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
             movieList.add(m);
             mAdapter.notifyDataSetChanged();
         }
+        getActivity().setTitle("Notificaciones ("+movieList.size()+")");
         fila.close();
         db.close();
 
@@ -203,19 +205,6 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
     }
 
     }
-
-    public void saveArray(List<Movie> sKey)
-    {
-        SharedPreferences sp = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor mEdit1 = sp.edit();
-
-        Gson gson = new Gson();
-        String json = gson.toJson(sKey);
-        mEdit1.putString("Movies", json);
-        mEdit1.commit();
-    }
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -273,7 +262,7 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
                     }
                 }
 
-
+                getActivity().setTitle("Notificaciones ("+movieList.size()+")");
 
                 m.findItem(R.id.action_delete).setVisible(false);
                 m.findItem(R.id.action_select_all).setVisible(false);
@@ -290,7 +279,6 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
                 for (int i = 0; i < movieList.size() ; i++) {
                         movieList.get(i).setSelected(true);
                 }
-               // saveArray(movieList);
                 mAdapter.notifyDataSetChanged();
                return true;
             }
