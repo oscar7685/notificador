@@ -27,7 +27,12 @@ import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class RegistrationIntentService extends IntentService {
 
@@ -90,7 +95,38 @@ public class RegistrationIntentService extends IntentService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
+        HttpURLConnection connection;
+        OutputStreamWriter request = null;
 
+        URL url = null;
+        String response = null;
+
+        String param = "token="+token;
+        try {
+            url = new URL("http://201.245.192.2:8080/Notificador2/Registrar");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true);
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            connection.setRequestMethod("POST");
+
+            request = new OutputStreamWriter(connection.getOutputStream());
+            request.write(param);
+            request.flush();
+            request.close();
+            String line = "";
+            InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+            BufferedReader reader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            isr.close();
+            reader.close();
+            System.out.println("enviando token"+token);
+    }
+        catch (Exception e ){
+            System.out.println("error enviando token"+token);
+        }
     }
 
     /**
