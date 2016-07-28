@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class NotificacionSQLiteHelper extends SQLiteOpenHelper {
     //Sentencia SQL para crear la tabla de Usuarios
-    String sqlCreate = "CREATE TABLE Notificacion (codigo INTEGER, nombre TEXT, genero TEXT, year TEXT )";
+    String sqlCreate = "CREATE TABLE Notificacion (codigo INTEGER, nombre TEXT, genero TEXT, year TEXT, url TEXT )";
 
     public NotificacionSQLiteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);

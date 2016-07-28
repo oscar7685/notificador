@@ -59,9 +59,9 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        System.out.println("mensaje recibido");
         String message = data.getString("message");
         String codigo = data.getString("codigo");
+        String url = data.getString("url");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
@@ -93,14 +93,15 @@ public class MyGcmListenerService extends GcmListenerService {
            registro.put("nombre", nombre);
            registro.put("genero", genero);
            registro.put("year", year);
+           registro.put("url", url);
            bd.insert("Notificacion", null, registro);
            bd.close();
 
 
            SQLiteDatabase bd2 = Ntdbh.getWritableDatabase();
-           Cursor fila = bd2.rawQuery("select codigo , nombre, genero, year from Notificacion", null);
+           Cursor fila = bd2.rawQuery("select codigo , nombre, genero, year, url from Notificacion", null);
            if (fila.moveToFirst()) {
-               Movie m = new Movie(fila.getInt(0), fila.getString(1), fila.getString(2), fila.getString(3));
+               Movie m = new Movie(fila.getInt(0), fila.getString(1), fila.getString(2), fila.getString(3), fila.getString(4));
                movieList.add(m);
                //mAdapter.notifyDataSetChanged();
            }

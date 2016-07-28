@@ -4,7 +4,10 @@ package com.casa.app.application.model;
  * Created by Juan on 29/05/2016.
  */
 public class Movie {
-    private String title, genre, year;
+    private String title;
+    private String genre;
+    private String year;
+    private String url;
     private boolean isSelected;
     private int visibility;
     private int codigo;
@@ -16,13 +19,15 @@ public class Movie {
         this.title = title;
         this.genre = genre;
         this.year = year;
+        this.setUrl("http://www.google.com");
     }
 
-    public Movie(int codigo, String title, String genre, String year) {
+    public Movie(int codigo, String title, String genre, String year, String url) {
         this.title = title;
         this.genre = genre;
         this.year = year;
         this.codigo = codigo;
+        this.url = url;
     }
 
 
@@ -72,5 +77,13 @@ public class Movie {
 
     public void setCodigo(int codigo) {
         this.codigo = codigo;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

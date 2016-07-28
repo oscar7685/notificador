@@ -5,9 +5,11 @@ package com.casa.app.application;
  */
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -97,6 +99,21 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
         rootView = inflater.inflate(R.layout.content_main, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
+                        @Override
+                        public void onClick(View view, int position) {
+                            Movie movie = movieList.get(position);
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(movie.getUrl()));
+                            startActivity(browserIntent);
+                            }
+
+
+                                @Override
+                        public void onLongClick(View view, int position) {
+
+                                    }
+                    }));
+
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
                 new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -165,10 +182,10 @@ public class MovieFragment extends  Fragment implements SearchView.OnQueryTextLi
         //Abrimos la base de datos 'DBUsuarios' en modo escritura
         NotificacionSQLiteHelper Ntdbh =    new NotificacionSQLiteHelper(getActivity(), "DBNotificiones", null, 1);
         SQLiteDatabase db = Ntdbh.getWritableDatabase();
-        Cursor fila = db.rawQuery("select codigo , nombre, genero, year from Notificacion", null);
+        Cursor fila = db.rawQuery("select codigo , nombre, genero, year, url from Notificacion", null);
         fila.moveToFirst();
         while(!fila.isAfterLast()) {
-            Movie m = new Movie(fila.getInt(0), fila.getString(1), fila.getString(2), fila.getString(3));
+            Movie m = new Movie(fila.getInt(0), fila.getString(1), fila.getString(2), fila.getString(3),fila.getString(4));
             fila.moveToNext();
             movieList.add(m);
             mAdapter.notifyDataSetChanged();

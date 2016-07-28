@@ -103,7 +103,7 @@ public class RegistrationIntentService extends IntentService {
 
         String param = "token="+token;
         try {
-            url = new URL("http://201.245.192.2:8080/Notificador2/Registrar");
+            url = new URL("http://192.168.1.57:8080/Notificador2/Registrar");
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");

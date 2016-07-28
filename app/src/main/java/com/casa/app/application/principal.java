@@ -46,6 +46,13 @@ public class principal extends AppCompatActivity implements FragmentDrawer.Fragm
         drawerFragment.setDrawerListener(this);
         displayView(0);
 
+        SharedPreferences appSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
+        prefsEditor.putString("Ip", "192.168.1.57");
+        prefsEditor.commit();
+
+
+
     }
 
     @Override
