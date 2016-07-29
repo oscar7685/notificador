@@ -36,6 +36,7 @@ public class principal extends AppCompatActivity implements FragmentDrawer.Fragm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println("ok+++++++++++++++++++++++++++++++++");
         setContentView(R.layout.activity_principal);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -101,6 +102,10 @@ public class principal extends AppCompatActivity implements FragmentDrawer.Fragm
             case 1:
                 fragment = new MovieFragment();
                 title = getString(R.string.title_messages);
+                break;
+            case 2:
+                fragment = new FriendsFragment();
+                title = getString(R.string.title_friends);
                 break;
             default:
                 break;

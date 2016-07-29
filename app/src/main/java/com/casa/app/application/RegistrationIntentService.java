@@ -102,8 +102,12 @@ public class RegistrationIntentService extends IntentService {
         String response = null;
 
         String param = "token="+token;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String ip = sharedPreferences.getString("Ip", "192.168.1.57");
+
+
         try {
-            url = new URL("http://192.168.1.57:8080/Notificador2/Registrar");
+            url = new URL("http://"+ip+":8080/Notificador2/Registrar");
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
