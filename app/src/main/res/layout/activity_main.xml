@@ -8,6 +8,8 @@
     android:background="@color/windowBackground"
     android:orientation="vertical" tools:context=".MainActivity">
 
+
+
     <TextView android:text="@string/registering_message" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/informationTextView"

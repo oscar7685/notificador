@@ -17,15 +17,16 @@
     <string name="drawer_close">Cerrar</string>
 
     <string name="nav_item_home">Registro</string>
-    <string name="nav_item_friends">Friends</string>
+    <string name="nav_item_ip">Ip</string>
     <string name="nav_item_notifications">Notificaciones</string>
-
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
         <item>@string/nav_item_notifications</item>
+        <item>@string/nav_item_ip</item>
     </string-array>
-
+    <string name="hint_password">Ip</string>
+    <string name="btn_sign_up">Aceptar</string>
     <string name="title_messages">Notificaciones</string>
     <string name="title_friends">Friends</string>
     <string name="title_home">Registro</string>

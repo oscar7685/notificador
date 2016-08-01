@@ -36,7 +36,6 @@ public class principal extends AppCompatActivity implements FragmentDrawer.Fragm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("ok+++++++++++++++++++++++++++++++++");
         setContentView(R.layout.activity_principal);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -49,7 +48,7 @@ public class principal extends AppCompatActivity implements FragmentDrawer.Fragm
 
         SharedPreferences appSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
-        prefsEditor.putString("Ip", "192.168.1.57");
+        prefsEditor.putString("Ip", "192.168.1.51");
         prefsEditor.commit();
 
 

@@ -103,8 +103,8 @@ public class RegistrationIntentService extends IntentService {
 
         String param = "token="+token;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String ip = sharedPreferences.getString("Ip", "192.168.1.57");
-
+        String ip = sharedPreferences.getString("Ip", "192.168.1.51");
+        System.out.println("se intentara enviar el token: "+token+" a la ip: "+ip);
 
         try {
             url = new URL("http://"+ip+":8080/Notificador2/Registrar");
@@ -126,7 +126,7 @@ public class RegistrationIntentService extends IntentService {
             }
             isr.close();
             reader.close();
-            System.out.println("enviando token"+token);
+
     }
         catch (Exception e ){
             System.out.println("error enviando token"+token);
